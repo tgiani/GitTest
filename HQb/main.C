@@ -27,10 +27,10 @@ LHAPDF::PDF * p_pdf;
 struct Kinetics {
   double x;
   double Q;
- 
 };
 
 Kinetics kin;
+
 
 
 
@@ -113,11 +113,6 @@ double intrinsic_component(double z[], size_t dim, void *p)
 
 
 
-
-
-
-
-
 extern "C" void externalsetapfel_(const double& x, const double& Q, double *xf)
 {
   kin.x = x;
@@ -161,8 +156,6 @@ extern "C" void externalsetapfel_(const double& x, const double& Q, double *xf)
    gsl_monte_vegas_free(state1);
    
 
-
-
     bpdf = inte + inte1 ;
   }
   xf[1] = xf[11] = bpdf;
@@ -204,29 +197,3 @@ int main()
 
 
 
-/***************
-
-
-
-
-int main(){
-
-struct para p;
-p.pdf = LHAPDF::mkPDF("NNPDF31_lo_as_0118",0);
-p.Q0=2;
-p.mub=4.5;
-p.Q=100;
-p.x=0.1;
-
-
-//cout << p.pdf->xfxQ(21,p.x,p.Q) << endl;
-
-cout << integral_ic(p) << endl;
-cout << integral_lo(p) << endl;
-cout << integral_nlo(p) << endl;
-
- return 0;
-
-}
-
-*********/
