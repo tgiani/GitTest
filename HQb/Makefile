@@ -23,7 +23,7 @@ pdf: helpers.o main.o
 helpers.o: helpers.C helpers.h
 					$(CXXCPP) -fPIC $(PDFINC) $(APFELINC) $(GSLINC) -o helpers.o -c helpers.C
 
-main.o: main.C bpdf.h
+main.o: main.C 
 					$(CXXCPP) -fPIC $(PDFINC) $(APFELINC) $(GSLINC) -o main.o -c main.C
 
 
