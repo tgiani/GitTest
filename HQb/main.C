@@ -45,18 +45,23 @@ double fs(double z)
 }
 
 
+
+
+
 //one dimensional lo and nlo integrals
 
 double integrand(double z, void * p)
 {
   if(z>kin.x){
+
     double Q = kin.Q;
-    double as = p_pdf->alphasQ(Q)/(2.*M_PI), 
-      m2b   = p_pdf->alphaS().quarkMass(5)*p_pdf->alphaS().quarkMass(5),
-      Q0 = 2,
-      L     = log(Q*Q/m2b),
-      as0   = p_pdf->alphasQ(Q0)/(2.*M_PI),
-      L0    = log(m2b/Q0*Q0);
+    double as = p_pdf->alphasQ(Q)/(2.*M_PI),
+       m2b   = p_pdf->alphaS().quarkMass(5)*p_pdf->alphaS().quarkMass(5),
+       Q0 = 2,
+       L     = log(Q*Q/m2b),
+       as0   = p_pdf->alphasQ(Q0)/(2.*M_PI),
+       L0    = log(m2b/Q0*Q0);
+
     
     double Agb = as*L*agb(z,1,1) 
       + pow(as,2)*(L*L*agb(z,2,2) + L*agb(z,2,1)+agb(z,2,0));
@@ -82,13 +87,14 @@ double integrand(double z, void * p)
 double intrinsic_component(double z[], size_t dim, void *p)
 {
 
-  double Q = kin.Q;
-  double as = p_pdf->alphasQ(Q)/(2.*M_PI), 
-      m2b   = p_pdf->alphaS().quarkMass(5)*p_pdf->alphaS().quarkMass(5),
-      Q0 = 2,
-      L     = log(Q*Q/m2b),
-      as0   = p_pdf->alphasQ(Q0)/(2.*M_PI),
-      L0    = log(m2b/Q0*Q0);
+ double Q = kin.Q;
+ double as = p_pdf->alphasQ(Q)/(2.*M_PI),
+       m2b   = p_pdf->alphaS().quarkMass(5)*p_pdf->alphaS().quarkMass(5),
+       Q0 = 2,
+       L     = log(Q*Q/m2b),
+       as0   = p_pdf->alphasQ(Q0)/(2.*M_PI),
+       L0    = log(m2b/Q0*Q0);
+
 
   double res(0.);
   double tau, jac(1.), xi, ximax;
@@ -117,47 +123,49 @@ extern "C" void externalsetapfel_(const double& x, const double& Q, double *xf)
 {
   kin.x = x;
   kin.Q = Q;
-  
+
   
   for (int i=0; i<13; ++i){
     xf[i] = (double) p_pdf->xfxQ(i-6,x,Q);
   }
+
   double bpdf(0.);;
-  if(Q>=p_pdf->alphaS().quarkMass(5)) {
-    double inte(0.),res(0.),err(0);
-    size_t neval(0);
-    gsl_integration_cquad_workspace * state = gsl_integration_cquad_workspace_alloc(100);
-    gsl_function F;
-    F.function = &integrand;
-    gsl_integration_cquad(&F,kin.x,p_pdf->xMax(),1.e-12,1.e-12,state,&inte,&err,&neval);
-    gsl_integration_cquad_workspace_free(state);
-    res = inte;
+  double inte(0.),res(0.),err(0);
+  size_t neval(0);
+  gsl_integration_cquad_workspace * state = gsl_integration_cquad_workspace_alloc(100);
+  gsl_function F;
+  F.function = &integrand;
+  gsl_integration_cquad(&F,kin.x,p_pdf->xMax(),1.e-12,1.e-12,state,&inte,&err,&neval);
+  gsl_integration_cquad_workspace_free(state);
+  res = inte;
 
 
 
 
-   size_t calls = 200000;
-   double inte1(0.),w2(0.);
-   size_t d=2;
-   double xmin[d], xmax[d];
-   for(size_t i(0); i<d; ++i){
+  size_t calls = 200000;
+  double inte1(0.),w2(0.);
+  size_t d=2;
+ 
+  double xmin[d], xmax[d];
+  for(size_t i(0); i<d; ++i){
     xmin[i] = 0.; xmax[i] =1.;                         //#### why now the integrals are performed both between 0 and 1 ?
-   }
-   gsl_monte_function G;
-   G.f = &intrinsic_component;
-   G.dim = d;
-   G.params = &kin;
-   gsl_monte_vegas_state* state1 = gsl_monte_vegas_alloc(d);
-   gsl_monte_vegas_init(state1);
-   gsl_rng * rng = gsl_rng_alloc(gsl_rng_taus);
-   gsl_monte_vegas_integrate(&G,xmin,xmax,d,calls,rng,state1,&inte1,&w2);
-   gsl_monte_vegas_integrate(&G,xmin,xmax,d,calls,rng,state1,&inte1,&w2);
-   gsl_rng_free(rng);
-   gsl_monte_vegas_free(state1);
+  }
+ 
+  gsl_monte_function G;
+  G.f = &intrinsic_component;
+  G.dim = d;
+  G.params = &kin;
+  gsl_monte_vegas_state* state1 = gsl_monte_vegas_alloc(d);
+  gsl_monte_vegas_init(state1);
+  gsl_rng * rng = gsl_rng_alloc(gsl_rng_taus);
+  gsl_monte_vegas_integrate(&G,xmin,xmax,d,calls,rng,state1,&inte1,&w2);
+  gsl_monte_vegas_integrate(&G,xmin,xmax,d,calls,rng,state1,&inte1,&w2);
+  gsl_rng_free(rng);
+  gsl_monte_vegas_free(state1);
    
 
-    bpdf = inte + inte1 ;
-  }
+  bpdf = inte + inte1 ;
+
   xf[1] = xf[11] = bpdf;
 }
 
