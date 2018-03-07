@@ -66,6 +66,6 @@ double xpdf(double x, double Q, int flavour){
 
 int main(){
 
- cout << "culo" << endl;
+
  return 0;
 }
