@@ -17,17 +17,20 @@ double Q0 = 2;
   extern "C" void externalsetapfel_(const double& x, const double& Q, double *xf)
 {
   
+  // Copy the input NNPDF31_bintrinsic everywhere.
+  // Apart from the b pdf this set is exactly NNPDF31_nnlo_as_0118
   for (int i=0; i<13; ++i){
-    xf[i] = (double) p_pdf->xfxQ(i-6,x,Q);    // light flavour and charm PDFs are those of the input set, which for that flavours has NNPDF31
+    xf[i] = (double) p_pdf->xfxQ(i-6,x,Q);    
   }
 
-  // for the bottom quark, if Q<mb we take NNPDF31_bintrinsic, if Q>mb we evolve NNPDF31_bintrinsic in 5FS
+  // For the bottom quark, if Q<mb we take NNPDF31_bintrinsic, if Q>mb we evolve NNPDF31_bintrinsic with 5FS
   double bpdf(0.);
   if(Q > mb){
 
        double Qa(mb), Qb(Q), eps = 1e-10;
        APFEL::SetPerturbativeOrder(2);
        APFEL::SetPDFSet("NNPDF31_bintrinsic_NLL.LHgrid");
+       APFEL::SetFFNS(5);
        APFEL::InitializeAPFEL(); 
        APFEL::EvolveAPFEL(Q0,Qa);
        bpdf = APFEL::xPDF(5,x);
@@ -38,14 +41,17 @@ double Q0 = 2;
 
        bpdf = (double) p_pdf->xfxQ(5,x,Q);;
        
-} 
+       } 
+
   xf[1] = xf[11] = bpdf;
 }
 
 
 
-int main()
-{
+
+// Generate an LHAPDF object using the PDF defined above
+int main(){
+
 
   APFEL::SetTheory("QCD");
   APFEL::SetPerturbativeOrder(2);
@@ -63,8 +69,6 @@ int main()
 
   APFEL::SetAlphaQCDRef(p_pdf->alphasQ(91.1987),91.1876);
   double Qin(-1.);
-  //APFEL::InitializeAPFEL();
-  APFEL::SetLHgridParameters(100,50,1e-9,1e-1,1,50,Qin*Qin,1e10);
   APFEL::LHAPDFgrid(0,Qin,"NNPDF31_test_NLL");
  
   return 0;
