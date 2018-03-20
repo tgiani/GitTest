@@ -60,7 +60,7 @@ int main(){
   APFEL::SetMaxFlavourPDFs(5);
   APFEL::SetVFNS();                // apfel evolution will be used only when Q>mb for bpdf, therefore only with 5 active flavours
 
-  p_pdf = LHAPDF::mkPDF("NNPDF31_nnlo_as_0118", 0);
+  p_pdf = LHAPDF::mkPDF("NNPDF31_bintrinsic_NLL", 0);
   APFEL::InitializeAPFEL();
 
   APFEL::SetPoleMasses(p_pdf->quarkMass(4),
