@@ -48,7 +48,7 @@ double integrand(double z, void * p)
          L     = log(Q*Q/m2b),
          as0   = p_pdf->alphasQ(Q0)/(2.*M_PI),
          L0    = log(m2b/Q0*Q0);
-
+  // if Q>mb, evolve the matching condition fb^(5)=K_bb(mb)fb^(4) + k_bi(mb)fi^(4)(mb) at higher scale 
   if(z>kin.x && m2b<Q*Q){
 
     double Agb = as*L*agb(z,1,1) 
@@ -62,14 +62,13 @@ double integrand(double z, void * p)
     
     return Agb*fg + Asb*fsigma + Agb0*fg0 + Abb_ep;
   }
-  // if Q<mb I keep the constant part due to thre intrinsic componenet
+  // if Q<mb I keep the constant part in the 4FS due to the intrinsic componenet fb^(4)
   if(z>kin.x && m2b>=Q*Q){
-
-    double Agb0 = as0*L0*agb(z,1,1);  // LO intrinsic component
-    double Abb_ep = - 2.*abb_ep(kin.x/z,L)*Pqg(1.)*p_pdf->xfxQ(21,z,Q0)/z *as*as0*L0;  // NLO intrinsic componenet
+    
+    double Agb0 = as0*L0*agb(z,1,1);  // scale independent intrinsic component in the 4FS (the matching with 5FS happens at scale mb)
     double fg0  = (double) p_pdf->xfxQ(21,kin.x/z,Q0);
 
-    return Agb0*fg0 + Abb_ep;
+    return Agb0*fg0;
   }
 
   return 0.;
@@ -108,13 +107,10 @@ double intrinsic_component(double z[], size_t dim, void *p)
     }
     return 2.*res*p_pdf->xfxQ(21,tt,Q0)*as*as0*L0;                    //#### t-->tt
   }
-  // if Q<mb I keep the constant part due to thre intrinsic componenet
+  // if Q<mb don't have this piece, which comes from the matching coefficient (introduced at scale mb to match 5FS and 4FS)
   else{
 
-    if(1.-zz > 1.e-5){
-      res = jac*abb(zz,0)*(Pqg(kin.x/zz/tt) - zz*Pqg(kin.x/tt))/tau;  //#### pqg-->Pqg
-    }
-    return 2.*res*p_pdf->xfxQ(21,tt,Q0)*as0*as0*L0;                   //#### t-->tt 
+    return 0;
   }
     
 }                
