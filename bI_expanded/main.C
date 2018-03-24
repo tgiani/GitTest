@@ -17,7 +17,7 @@
 using namespace LHAPDF;
 using namespace std;
 
-
+double A = 0.0584742; // normalization constant
 LHAPDF::PDF * p_pdf;
 
 struct Kinetics {
@@ -60,7 +60,7 @@ double integrand(double z, void * p)
     double fg0  = (double) p_pdf->xfxQ(21,kin.x/z,Q0);
     double fsigma = fs(kin.x/z);
     
-    return Agb*fg + Asb*fsigma + Agb0*fg0 + Abb_ep;
+    return Agb*fg + Asb*fsigma + A*Agb0*fg0 + A*Abb_ep;
   }
   // if Q<mb I keep the constant part in the 4FS due to the intrinsic componenet fb^(4)
   if(z>kin.x && m2b>=Q*Q){
@@ -68,7 +68,7 @@ double integrand(double z, void * p)
     double Agb0 = as0*L0*agb(z,1,1);  // scale independent intrinsic component in the 4FS (the matching with 5FS happens at scale mb)
     double fg0  = (double) p_pdf->xfxQ(21,kin.x/z,Q0);
 
-    return Agb0*fg0;
+    return A*Agb0*fg0;
   }
 
   return 0.;
@@ -105,7 +105,7 @@ double intrinsic_component(double z[], size_t dim, void *p)
     if(1.-zz > 1.e-5){
       res = jac*abb(zz,L)*(Pqg(kin.x/zz/tt) - zz*Pqg(kin.x/tt))/tau;  //#### pqg-->Pqg
     }
-    return 2.*res*p_pdf->xfxQ(21,tt,Q0)*as*as0*L0;                    //#### t-->tt
+    return 2.*res*p_pdf->xfxQ(21,tt,Q0)*as*as0*L0*A;                    //#### t-->tt
   }
   // if Q<mb don't have this piece, which comes from the matching coefficient (introduced at scale mb to match 5FS and 4FS)
   else{
@@ -180,7 +180,7 @@ int main()
   APFEL::SetVFNS();
   //APFEL::InitializeAPFEL();
   //APFEL::SetLHgridParameters(100,50,1e-9,1e-1,1,50,Qin*Qin,1e10);
-  APFEL::LHAPDFgrid(0,Qin,"NNPDF31_bI_expanded__NLL");
+  APFEL::LHAPDFgrid(0,Qin,"NNPDF31_bI_expanded2__NLL");
  
   return 0;
 }
