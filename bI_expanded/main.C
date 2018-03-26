@@ -180,7 +180,7 @@ int main()
   APFEL::SetVFNS();
   //APFEL::InitializeAPFEL();
   //APFEL::SetLHgridParameters(100,50,1e-9,1e-1,1,50,Qin*Qin,1e10);
-  APFEL::LHAPDFgrid(0,Qin,"NNPDF31_bI_expanded2__NLL");
+  APFEL::LHAPDFgrid(0,Qin,"NNPDF31_bI_expandedNORM_NLL");
  
   return 0;
 }
