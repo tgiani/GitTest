@@ -1,0 +1,107 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\begin{document}
+\section*{Bottom PDF with an intrinsic component}
+Here we describe the implementation of a PDF for the bottom quark which takes into account an intrinsic component.
+We have first derived an expanded expression for such a PDF at NLL, and then we have used that as input in APFEL to obtain another bottom PDF which takes into account the full evolution.
+\subsection*{Exapanded bottom PDF}
+Considering the standard 5FS bottom PDF, we can write it in terms of the light flavours $q = u ,d, s, c $ plus the gluon densities $g$ in the 4FS:
+\begin{equation}
+\begin{split}
+f^{\left(5\right)}_b\left(x,Q^2\right)= \sum_{i=q,g}\int_x^1\frac{dz}{z}K_{b,i}\left(z,Q^2\right)f^{\left(4\right)}_i\left(\frac{x}{z},Q^2\right).
+\end{split}
+\end{equation}
+Writing this at NLL we get, according to notation of Ref.\cite{1} and Ref.\cite{3} 
+\begin{equation}
+f^{\left(5\right)}_b\left(x,Q^2\right)= f^{\left(5\right),LO}\left(x,Q^2\right) + f^{\left(5\right),NLO}_b\left(x,Q^2\right)
+\end{equation}
+with
+\begin{equation}
+\begin{split}
+&f^{\left(5\right),LO}_b\left(x,Q^2\right) = \alpha_s\left(Q^2\right)\int_x^1\frac{dz}{z}f_{g}^{\left(5\right)}\left(\frac{x}{z},Q^2\right) A_{g b}^{\left(1\right)}\left(z,L\right) \\ \\
+&f^{\left(5\right),NLO}_b\left(x,Q^2\right) = \left(\alpha_s\left(Q^2\right)\right)^2\int_x^1\frac{dz}{z}\left[f_g^{\left(5\right)}\left(\frac{x}{z},Q^2\right)A_{g b}^{\left(2\right)}\left(z,L\right)+f_{\Sigma}^{\left(5\right)}\left(\frac{x}{z},Q^2\right) A_{\Sigma b}^{\left(2\right)}\left(z,L\right)\right]
+\end{split}
+\end{equation}
+which is Eq.(16) of Ref.\cite{2} and the coefficients $A_{ij} $ are computed in Ref.\cite{3}.
+If we want to compute an expanded bottom PDF $\tilde{f}_b\left(x,Q^2\right) $ which takes into account some intrinsic component then
+\begin{equation}
+\begin{split}
+\tilde{f}_b\left(x,Q^2\right)= f^{\left(5\right)}_b\left(x,Q^2\right) + f_b^{\left(I\right)}\left(x,Q^2\right),
+\end{split}
+\end{equation}
+with 
+\begin{equation}
+f_b^{\left(I\right)}\left(x,Q^2\right)=\int_x^1 \frac{dz}{z}A_{bb}\left(z,L\right)f_b^{\left(4\right)}\left(\frac{x}{z}\right).
+\end{equation}
+The coefficient $A_{bb}\left(z,L\right) $ is computed up to NLO in Ref.\cite{4} and $f_b^{\left(4\right)}\left(x\right) $ is a parametrization for the intrinsic component of the bottom. Here we take 
+\begin{equation}
+\begin{split}
+f_b^{\left(4\right)}\left(x\right) &= M*\frac{\alpha_s\left(m_b^2\right)}{2\pi}\log\frac{m_b^2}{Q_0^2}\int_x^1 \frac{dt}{t}P_{qg}\left(t\right)f_g\left(\frac{x}{t},Q_0^2\right) \\
+&= N_0 \int_x^1 \frac{dt}{t}P_{qg}\left(t\right)f_g\left(\frac{x}{t},Q_0^2\right),
+\end{split}
+\end{equation}
+where $Q_0=2 \,GeV$ and $M$ is a normalization constant such that
+\begin{equation}
+\int_0^1 dx \, x\left(f_b^{\left(4\right)}\left(x\right)+ f_{\bar{b}}^{\left(4\right)}\left(x\right)\right) = 10^{-4}.
+\end{equation}
+Since
+\begin{equation}
+A_{bb}\left(z,L\right)= \delta\left(z-1\right) + \alpha_s\left(Q^2\right)\left[A_{bb}^{\left(1\right)}\left(z,L\right)\right]_{+},
+\end{equation}
+we can write
+\begin{equation}
+f_b^{\left(I\right),LO}\left(x,Q^2\right)= f_b^{\left(4\right)}\left(x\right) = N_0\int_x^1 \frac{dt}{t}P_{qg}\left(t\right)f_g\left(\frac{x}{t},Q_0^2\right)
+\end{equation} 
+and 
+\begin{equation}
+\begin{split}
+f_b^{\left(I\right),NLO}\left(x,Q^2\right)= N_0\,\alpha_s\left(Q^2\right) \int_x^1 \frac{dz}{z} \left[A_{bb}^{\left(1\right)}\left(z,L\right)\right]_{+}\int_{\frac{x}{z}}^{1}\frac{dt}{t}P_{qg}\left(\frac{x}{zt}\right)f_g\left(t\right).
+\end{split}
+\end{equation}
+Using 
+\begin{equation}
+\int_x^1 dz \int_{\frac{x}{z}}^{1} dt = \int_x^1 dt \int_{\frac{x}{t}}^{1}dz
+\end{equation}
+we get
+\begin{equation}
+\begin{split}
+&\frac{f_b^{\left(I\right),NLO}\left(x,Q^2\right)}{N_0 \,\alpha_s\left(Q^2\right)}= \int_x^1 \frac{dt}{t} f_g\left(t\right) \int_{\frac{x}{t}}^{1}\frac{dz}{z}\left[A_{bb}^{\left(1\right)}\left(z,L\right)\right]_{+}P_{qg}\left(\frac{x}{zt}\right) \\
+&=\int_x^1 \frac{dt}{t} f_g\left(t\right) \int_{0}^{1}\frac{dz}{z}\left[A_{bb}^{\left(1\right)}\left(z,L\right)\right]_{+}P_{qg}\left(\frac{x}{zt}\right)\Theta\left(z-\frac{x}{t}\right) \\
+&=\int_x^1 \frac{dt}{t} f_g\left(t\right) \int_{0}^{1}\frac{dz}{z}A_{bb}^{\left(1\right)}\left(z,L\right)\left[P_{qg}\left(\frac{x}{zt}\right)\Theta\left(z-\frac{x}{t}\right) - z P_{qg}\left(\frac{x}{t}\right)\Theta\left(1-\frac{x}{t}\right)\right]
+\end{split}
+\end{equation}
+Since $t > x $ in the last line we can write $\Theta\left(1-\frac{x}{t}\right)=1=\Theta\left(z-\frac{x}{t}\right)+\Theta\left(\frac{x}{t}-z\right)  $ getting
+\begin{equation}
+\begin{split}
+&\frac{f_b^{\left(I\right),NLO}\left(x,Q^2\right)}{N_0\,\alpha_s\left(Q^2\right)}= \int_x^1 \frac{dt}{t} f_g\left(t\right) \int_{\frac{x}{t}}^{1}\frac{dz}{z}A_{bb}^{\left(1\right)}\left(z,L\right)\left[P_{qg}\left(\frac{x}{zt}\right) - z P_{qg}\left(\frac{x}{t}\right)\right] \\
+& - \int_x^1 \frac{dt}{t} f_g\left(t\right)P_{qg}\left(\frac{x}{t}\right)\int_0^{\frac{x}{t}}A_{bb}^{\left(1\right)}\left(z,L\right) dz 
+\end{split}
+\end{equation}
+The last integral can be computed analytically getting $\int_0^{\frac{x}{t}}A_{bb}^{\left(1\right)}\left(z,L\right) dz = A_{bb,e}\left(\frac{x}{t}, L\right).$
+To sum up, we get a final result made by a single monodimensional integral, containing all the LO and part of the NLO contributions, and a bidimensional integral coming from the NLO part of the intrinsic component. The final expression is 
+\begin{equation}
+\begin{split}
+&\tilde{f}_b\left(x,Q^2\right) = f^{\left(5\right)}\left(x,Q^2\right) + f_b^{\left(I\right)}\left(x,Q^2\right)  \\
+&=\alpha_s\left(Q^2\right)\int_x^1\frac{dz}{z}\bigg[f_{g}^{\left(5\right)}\left(\frac{x}{z},Q^2\right) A_{g b}^{\left(1\right)}\left(z,L\right) +  N_0 P_{qg}\left(z\right)f_g\left(\frac{x}{z},Q_0^2\right) \\
+&\,\,\,\,\,\,\,\,\,\,\,\,\,\,+ \alpha_s\left(Q^2\right)\bigg(-N_0 f_g\left(z\right)P_{qg}\left(\frac{x}{z}\right)A_{bb,e}\left(\frac{x}{z}\right)\\ & \,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,\,+f_g^{\left(5\right)}\left(\frac{x}{z},Q^2\right)A_{g b}^{\left(2\right)}\left(z,L\right)+f_{\Sigma}^{\left(5\right)}\left(\frac{x}{z},Q^2\right) A_{\Sigma b}^{\left(2\right)}\left(z,L\right) \bigg)\bigg] \\
+&+ N_0 \alpha_s\left(Q^2\right)\int_x^1 \frac{dt}{t} f_g\left(t\right) \int_{\frac{x}{t}}^{1}\frac{dz}{z}A_{bb}^{\left(1\right)}\left(z,L\right)\left[P_{qg}\left(\frac{x}{zt}\right) - z P_{qg}\left(\frac{x}{t}\right)\right]
+\end{split}
+\end{equation}
+
+\subsection*{Full evolved PDF}
+We take the bottom PDF produced in the previous section and we evolved that using APFEL starting from a fixed threshold scale. Before performing the evolution, we impose the momentum sum rules at the threshold scale, modifying the gluon distribution.
+
+
+
+\begin{thebibliography}{9}
+	\bibitem{1} 1203.6393 
+	\bibitem{2} 1607.00389
+	\bibitem{3} 9612398
+	\bibitem{4} 1510.00009
+	\bibitem{5} 1001.2312
+\end{thebibliography}
+\end{document}
